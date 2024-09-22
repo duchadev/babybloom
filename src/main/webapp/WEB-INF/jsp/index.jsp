@@ -8,6 +8,7 @@
 </head>
 <body>
 <h1>Home page</h1>
-<a href="/login">Login</a>
+<a href="/BabyBloom/login">Login</a>
+<a href="/BabyBloom/register">Register</a>
 </body>
 </html>

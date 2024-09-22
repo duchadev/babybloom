@@ -1,11 +1,13 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
-  <modelVersion>4.0.0</modelVersion>
-  <groupId>BabyBloom</groupId>
-  <artifactId>BabyBloom</artifactId>
-  <version>0.0.1-SNAPSHOT</version>
-  <packaging>war</packaging>
-  <name>BabyBloom</name>
-  <properties>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>BabyBloom</groupId>
+	<artifactId>BabyBloom</artifactId>
+	<version>0.0.1-SNAPSHOT</version>
+	<packaging>war</packaging>
+	<name>BabyBloom</name>
+	<properties>
 		<springframework.version>5.1.5.RELEASE</springframework.version>
 		<hibernate.version>5.4.1.Final</hibernate.version>
 		<mssql.connector.version>9.4.0.jre8</mssql.connector.version>
@@ -24,13 +26,13 @@
 			<artifactId>spring-webmvc</artifactId>
 			<version>${springframework.version}</version>
 		</dependency>
-		
-	
-<dependency>
-    <groupId>com.fasterxml.jackson.datatype</groupId>
-    <artifactId>jackson-datatype-jsr310</artifactId>
-    <version>2.15.0</version> <!-- Use the latest compatible version -->
-</dependency>
+
+
+		<dependency>
+			<groupId>com.fasterxml.jackson.datatype</groupId>
+			<artifactId>jackson-datatype-jsr310</artifactId>
+			<version>2.15.0</version> <!-- Use the latest compatible version -->
+		</dependency>
 
 		<!-- Hibernate -->
 		<dependency>
@@ -49,18 +51,18 @@
 			<version>${springframework.version}</version>
 		</dependency>
 		<dependency>
-    <groupId>org.projectlombok</groupId>
-    <artifactId>lombok</artifactId>
-    <version>1.18.24</version> <!-- Use the latest version -->
-    <scope>provided</scope>
-</dependency>
+			<groupId>org.projectlombok</groupId>
+			<artifactId>lombok</artifactId>
+			<version>1.18.24</version> <!-- Use the latest version -->
+			<scope>provided</scope>
+		</dependency>
 		<!-- SQL server -->
 		<dependency>
 			<groupId>com.microsoft.sqlserver</groupId>
 			<artifactId>mssql-jdbc</artifactId>
 			<version>${mssql.connector.version}</version>
 		</dependency>
-		
+
 		<!-- Servlet JSP JSTL -->
 		<dependency>
 			<groupId>javax.servlet</groupId>
@@ -77,7 +79,7 @@
 			<artifactId>jstl</artifactId>
 			<version>1.2</version>
 		</dependency>
-		
+
 		<!-- Spring data -->
 		<dependency>
 			<groupId>javax.xml.bind</groupId>
@@ -99,6 +101,23 @@
 			<artifactId>spring-data-jpa</artifactId>
 			<version>2.1.0.RELEASE</version>
 		</dependency>
+
+		
+<dependency>
+    <groupId>com.sun.mail</groupId>
+    <artifactId>jakarta.mail</artifactId>
+    <version>2.0.1</version> <!-- Use the latest version available -->
+</dependency>
+<!-- JavaMail -->
+
+
+<!-- Java Activation -->
+<dependency>
+    <groupId>javax.activation</groupId>
+    <artifactId>activation</artifactId>
+    <version>1.1.1</version> <!-- Or the latest version -->
+</dependency>
+
 	</dependencies>
 	<build>
 		<finalName>BabyBloom</finalName>
