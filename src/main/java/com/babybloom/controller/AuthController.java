@@ -1,6 +1,9 @@
 package com.babybloom.controller;
 
 import java.lang.System.Logger;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.util.Base64;
 import java.util.Properties;
 import java.util.Random;
@@ -46,14 +49,16 @@ public class AuthController {
 	public String login(@RequestParam(value = "email", defaultValue = "") String email,
 			@RequestParam(value = "phone", defaultValue = "") String phoneNumber,
 			@RequestParam("password") String password, Model model) {
+		Base64.Encoder encoder = Base64.getEncoder();
+		String encodePass = encoder.encodeToString(password.getBytes());
 		if (!email.isBlank()) {
 			Customers customers = accountRepository.findAccountByEmail(email);
 			if (customers != null) {
-				if (customers.getPassword().trim().equalsIgnoreCase(password.trim())) {
-					System.out.println("Login successfully: "+customers);
+				if (customers.getPassword().trim().equalsIgnoreCase(encodePass.trim())) {
+					System.out.println("Login successfully: " + customers);
 					return "jsp/index";
 				} else {
-					System.out.println("Login successfully: "+customers);
+					System.out.println("Login failed: " + customers);
 					return "jsp/login-page";
 				}
 			} else {
@@ -62,8 +67,8 @@ public class AuthController {
 		} else {
 			Customers customers = accountRepository.findCustomersByPhoneNumber(phoneNumber);
 			if (customers != null) {
-				if (customers.getPassword().trim().equalsIgnoreCase(password.trim())) {
-					System.out.println("Login successfully: "+customers);
+				if (customers.getPassword().trim().equalsIgnoreCase(encodePass.trim())) {
+					System.out.println("Login successfully: " + customers);
 					return "jsp/index";
 				} else {
 					System.out.println("Login falied!: ");
@@ -84,9 +89,9 @@ public class AuthController {
 	@PostMapping("/register")
 	public String register(@RequestParam("username") String username, @RequestParam("email") String email,
 			@RequestParam("password") String password, @RequestParam("password_confirmation") String confirmPassword,
-			@RequestParam("phone") String phone,
-			Model model, HttpServletRequest request) {
+			@RequestParam("phone") String phone, Model model, HttpServletRequest request) {
 		boolean nameNull = isNull(username);
+		boolean phoneNull = isNull(username);
 		boolean emailNull = isNull(email);
 		boolean passNull = isNull(password);
 		boolean pass2Null = isNull(confirmPassword);
@@ -95,7 +100,7 @@ public class AuthController {
 		boolean passValid = isValidPassword(password);
 		boolean pass2Valid = true;
 		boolean nameAdmin = isAdmin(username);
-
+		boolean phoneValid = isValidPhoneNumber(phone);
 		if (nameNull) {
 			if (nameValid) {
 				if (nameAdmin) {
@@ -136,6 +141,26 @@ public class AuthController {
 			}
 		} else {
 			model.addAttribute("tbEmail", "Vui lòng nhập Email");
+
+		}
+//    ------------------------------------------
+		if (phoneNull) {
+			if (phoneValid) {
+				try {
+					if (accountRepository.findCustomersByPhoneNumber(phone) != null) {
+
+						model.addAttribute("tbEmail", "Số điện thoại đã tồn tại");
+					}
+				} catch (Exception ex) {
+					ex.printStackTrace();
+					return "jsp/register";
+				}
+			} else {
+				model.addAttribute("tbEmail", "Vui lòng nhập đúng định dạng số điện thoại");
+
+			}
+		} else {
+			model.addAttribute("tbEmail", "Vui lòng nhập số điện thoại");
 
 		}
 //    ------------------------------------------
@@ -226,7 +251,7 @@ public class AuthController {
 				}
 
 			} else {
-				model.addAttribute("phone",phone);
+				model.addAttribute("phone", phone);
 				model.addAttribute("email", email);
 				model.addAttribute("username", username);
 				model.addAttribute("password", password);
@@ -267,6 +292,13 @@ public class AuthController {
 		return password.matches(regex);
 	}
 
+	public static boolean isValidPhoneNumber(String phoneNumber) {
+		// Check if the phone number matches the pattern
+		Pattern pattern = Pattern.compile("^0\\d{9}$");
+		Matcher matcher = pattern.matcher(phoneNumber);
+		return matcher.matches();
+	}
+
 	private boolean isAdmin(String username) {
 		if (username.contains("admin")) {
 			return false;
@@ -279,7 +311,7 @@ public class AuthController {
 	public String otpValidate(@RequestParam("otp") int otp, Model model,
 			@RequestParam(value = "otp1", required = false, defaultValue = "0") int value,
 			@RequestParam("username") String username, @RequestParam("password") String password,
-			@RequestParam("email") String email,@RequestParam("phone") String phone) {
+			@RequestParam("email") String email, @RequestParam("phone") String phone) {
 		if (otp != 0) {
 			if (value == otp) {
 				try {
@@ -316,5 +348,150 @@ public class AuthController {
 			return "jsp/otp-new-account";
 		}
 
+	}
+
+	@GetMapping("/forgot-password")
+	public String forgotPass() {
+		return "jsp/forgotPassword";
+	}
+
+	@PostMapping("/forgot-password")
+	public String changePass(@RequestParam("email") String email, HttpServletRequest request, Model model) {
+
+		Customers customer = new Customers();
+		customer = accountRepository.findAccountByEmail(email);
+		if (customer != null) {
+			RequestDispatcher dispatcher = null;
+			int otpvalue = 0;
+			final HttpSession mySession = request.getSession();
+
+			if (email != null || !email.equals("")) {
+				// sending otp
+				Random rand = new Random();
+				otpvalue = rand.nextInt(1255650);
+
+				String to = email;// change accordingly
+
+				// Get the session object
+				Properties props = new Properties();
+				props.put("mail.smtp.auth", "true");
+				props.put("mail.smtp.starttls.enable", "true");
+				props.put("mail.smtp.host", "smtp.gmail.com");
+				props.put("mail.smtp.port", "587");
+				Session session = Session.getDefaultInstance(props, new Authenticator() {
+					@Override
+					protected PasswordAuthentication getPasswordAuthentication() {
+						return new PasswordAuthentication("duchadev145@gmail.com", "visalfxbxsiokmot");// Put your email
+						// password here
+					}
+				});
+				// compose message
+				try {
+					MimeMessage message = new MimeMessage(session);
+					message.setFrom(new InternetAddress(email));// change accordingly
+					message.addRecipient(Message.RecipientType.TO, new InternetAddress(to));
+					message.setSubject("Thông Tin Mã OTP Cho Quá Trình Thiết Lập Lại Mật Khẩu");
+					message.setText("Chào bạn,\n" + "\n"
+							+ "Chúng tôi nhận được yêu cầu thiết lập lại mật khẩu từ bạn. Để tiếp tục quá trình này, vui lòng sử dụng mã OTP dưới đây:\n"
+							+ "\n" + "Mã OTP của bạn là: " + otpvalue + "\n" + "\n"
+							+ "Vui lòng nhập mã OTP này vào trang thiết lập lại mật khẩu để tiếp tục quá trình thiết lập lại mật khẩu. Xin lưu ý rằng mã OTP này sẽ hết hạn sau 100 giây.\n"
+							+ "\n"
+							+ "Nếu bạn không yêu cầu thiết lập lại mật khẩu, vui lòng liên hệ với chúng tôi ngay để bảo vệ tài khoản của bạn.\n"
+							+ "\n"
+							+ "Nếu bạn cần hỗ trợ hoặc có bất kỳ câu hỏi nào, đừng ngần ngại liên hệ với chúng tôi qua địa chỉ email [420ent@gmail.com] hoặc số điện thoại 0868686868.\n"
+							+ "\n" + "Trân trọng,\n" + "FastFood Store");
+					// send message
+					Transport.send(message);
+					System.out.println("message sent successfully");
+				} catch (MessagingException e) {
+					System.out.println("Loi");
+					throw new RuntimeException(e);
+				}
+
+				mySession.setAttribute("otp", otpvalue);
+				mySession.setAttribute("email", email);
+
+				model.addAttribute("message", "OTP is sent to your email");
+				return "jsp/enterOtp";
+			} else {
+
+				model.addAttribute("message", "No email found!");
+				return "jsp/forgotPassword";
+			}
+
+		} else {
+
+			model.addAttribute("message", "No email found!");
+			return "jsp/forgotPassword";
+		}
+
+	}
+
+	@PostMapping("/new-password")
+	public String newPassword(HttpServletRequest request, Model model, @RequestParam("password") String newPassword,
+			@RequestParam("confPassword") String confPassword) {
+		HttpSession session = request.getSession();
+		
+		Base64.Encoder encoder = Base64.getEncoder();
+		
+		String encodePass = encoder.encodeToString(newPassword.getBytes());
+		RequestDispatcher dispatcher = null;
+		if (newPassword != null && confPassword != null && newPassword.equals(confPassword)) {
+
+			try {
+				Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
+				Connection con = DriverManager.getConnection(
+						"jdbc:sqlserver://127.0.0.1:1433;DatabaseName=BabyBlom;encrypt=true;trustServerCertificate=true;",
+						"sa", "admin");
+				PreparedStatement pst = con.prepareStatement("update Customers set password = ? where  email   = ? ");
+				pst.setString(1, encodePass);
+				pst.setString(2, (String) session.getAttribute("email"));
+
+				int rowCount = pst.executeUpdate();
+				if (rowCount > 0) {
+					request.setAttribute("status", "resetSuccess");
+					model.addAttribute("status", "resetSuccess");
+					return "jsp/login-page";
+				} else {
+					request.setAttribute("status", "resetFail");
+					model.addAttribute("status", "resetSuccess");
+					return "jsp/login-page";
+				}
+
+			} catch (Exception e) {
+				
+				e.printStackTrace();
+				return "jsp/newPassword";
+			}
+		} else {
+			return "jsp/newPassword";
+		}
+	}
+	
+	@PostMapping("/validate-otp")
+	public String validateOtp(HttpServletRequest request, Model model )
+	{
+		  int value = (request.getParameter("otp1") != null) ? Integer.parseInt(request.getParameter("otp1")) : 0;
+
+	        int otp = Integer.parseInt(request.getParameter("otp"));
+
+	        RequestDispatcher dispatcher = null;
+
+	        if (otp != 0) {
+	            if (value == otp) {
+	            	model.addAttribute("email", request.getParameter("email"));
+	            	model.addAttribute("status", "success");
+	               return "jsp/newPassword";
+	               
+	                
+
+	            } else {
+	            	model.addAttribute("message", "wrong otp");
+	               return "jsp/otp-new-account";
+	            }
+	        } else {
+	        	model.addAttribute("message", "otp expired!");
+	               return "jsp/otp-new-account";
+	        }
 	}
 }
