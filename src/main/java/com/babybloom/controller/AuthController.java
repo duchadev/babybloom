@@ -11,7 +11,6 @@ import javax.servlet.RequestDispatcher;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -20,7 +19,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import com.babybloom.entities.Account;
+import com.babybloom.entities.Customers;
 import com.babybloom.repository.AccountRepository;
 
 import jakarta.mail.Authenticator;
@@ -44,17 +43,48 @@ public class AuthController {
 	}
 
 	@PostMapping("/login")
-	public String login(@RequestParam("email") String email, @RequestParam("password") String password, Model model) {
-		return "jsp/abc";
+	public String login(@RequestParam(value = "email", defaultValue = "") String email,
+			@RequestParam(value = "phone", defaultValue = "") String phoneNumber,
+			@RequestParam("password") String password, Model model) {
+		if (!email.isBlank()) {
+			Customers customers = accountRepository.findAccountByEmail(email);
+			if (customers != null) {
+				if (customers.getPassword().trim().equalsIgnoreCase(password.trim())) {
+					System.out.println("Login successfully: "+customers);
+					return "jsp/index";
+				} else {
+					System.out.println("Login successfully: "+customers);
+					return "jsp/login-page";
+				}
+			} else {
+				return "jsp/login-page";
+			}
+		} else {
+			Customers customers = accountRepository.findCustomersByPhoneNumber(phoneNumber);
+			if (customers != null) {
+				if (customers.getPassword().trim().equalsIgnoreCase(password.trim())) {
+					System.out.println("Login successfully: "+customers);
+					return "jsp/index";
+				} else {
+					System.out.println("Login falied!: ");
+					return "jsp/login-page";
+				}
+			} else {
+				return "jsp/login-page";
+			}
+		}
 
 	}
+
 	@GetMapping("/register")
 	public String registerPage() {
 		return "jsp/register-page";
 	}
+
 	@PostMapping("/register")
 	public String register(@RequestParam("username") String username, @RequestParam("email") String email,
 			@RequestParam("password") String password, @RequestParam("password_confirmation") String confirmPassword,
+			@RequestParam("phone") String phone,
 			Model model, HttpServletRequest request) {
 		boolean nameNull = isNull(username);
 		boolean emailNull = isNull(email);
@@ -196,7 +226,7 @@ public class AuthController {
 				}
 
 			} else {
-
+				model.addAttribute("phone",phone);
 				model.addAttribute("email", email);
 				model.addAttribute("username", username);
 				model.addAttribute("password", password);
@@ -207,7 +237,7 @@ public class AuthController {
 			ex.printStackTrace();
 			return "jsp/register-page";
 		}
-		 return "jsp/register-page";
+		return "jsp/register-page";
 	}
 
 	private boolean isNull(String text) {
@@ -249,26 +279,26 @@ public class AuthController {
 	public String otpValidate(@RequestParam("otp") int otp, Model model,
 			@RequestParam(value = "otp1", required = false, defaultValue = "0") int value,
 			@RequestParam("username") String username, @RequestParam("password") String password,
-			@RequestParam("email") String email) {
+			@RequestParam("email") String email,@RequestParam("phone") String phone) {
 		if (otp != 0) {
 			if (value == otp) {
 				try {
-					Account account = new Account();
+					Customers account = new Customers();
 					Base64.Encoder encoder = Base64.getEncoder();
 					String encodePass = encoder.encodeToString(password.getBytes());
 
-					String phoneNumber = "";
-					String role = "customer";
-					String firstName = "";
-					String lastName = "";
+					String phoneNumber = phone;
+
+					String nameString = "";
 					String address = "";
-					account.setFirstName(firstName);
-					account.setLastName(lastName);
+					account.setPhoneNumber(phoneNumber);
+					account.setName(username);
+					account.setName(nameString);
 					account.setAddress(address);
 					account.setEmail(email);
 					account.setPassword(encodePass);
 					account.setPhoneNumber(phoneNumber);
-					account.setRole(role);
+
 					accountRepository.save(account);
 					return "jsp/login-page";
 				} catch (Exception ex) {

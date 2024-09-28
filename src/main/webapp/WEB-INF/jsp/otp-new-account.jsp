@@ -43,6 +43,7 @@
                                     String username = request.getParameter("username");
                                      String password = request.getParameter("password");
                                      String email = request.getParameter("email");
+                                     String phone = request.getParameter("phone");
 // Bây giờ bạn có thể sử dụng giá trị otp ở đây trong trang EnterOtp.jsp
                                 %>
                                 <p id="countdown"></p>
@@ -56,6 +57,7 @@
                                        <input type="hidden" id ="username" name="username" value="<%= username %>" />
                                        <input type="hidden" id ="password" name="password" value="<%= password %>" />
                                        <input type="hidden" id ="email" name="email" value="<%= email %>" />
+                                          <input type="hidden" id ="phone" name="phone" value="<%= phone %>" />
                                        <div class="form-group">
                                             <div class="input-group">
                                                 <span class="input-group-addon"><i
