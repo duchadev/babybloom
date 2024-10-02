@@ -1,0 +1,49 @@
+.navbar .nav-link {
+    font-weight: bold;
+    display: inline-block;
+    padding: 5px 10px;
+}
+
+.navbar .nav-link:hover {
+    background-color: #e9ecef;
+    border-radius: 20px;
+    margin: 0 5px;
+    transition: background-color 0.5s ease-in-out;
+}
+
+.banner {
+    background-color: #e9ecef;
+    padding: 60px 20px;
+    text-align: center;
+}
+
+.banner h1 {
+    font-weight: bold;
+}
+
+.navbar .nav-link {
+    color: #000;
+}
+
+.footer {
+    padding: 20px 0;
+    text-align: center;
+}
+
+.footer h6 {
+    font-weight: bold;
+}
+
+.footer p {
+    margin: 0;
+}
+
+.logo img {
+    width: 100px;
+}
+
+hr {
+    width: 60%;
+    margin: 30px auto;
+    border: 0.5px solid #000;
+}

@@ -67,7 +67,7 @@ public class SpringConfig extends WebMvcConfigurerAdapter implements Application
     public DriverManagerDataSource getDataSource() {
         DriverManagerDataSource datasource = new DriverManagerDataSource();
         datasource.setDriverClassName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
-        datasource.setUrl("jdbc:sqlserver://localhost:1433;databaseName=BabyBlom");
+        datasource.setUrl("jdbc:sqlserver://localhost:1433;databaseName=BabyBloomDB");
         datasource.setUsername("sa");
         datasource.setPassword("admin");
         return datasource;

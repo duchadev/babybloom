@@ -1,0 +1,204 @@
+
+/* Phần Ý nghĩa thương hiệu */
+.brand-meaning {
+    margin: 50px 0;
+    text-align: center;
+}
+
+.brand-meaning h2 {
+    font-weight: bold;
+}
+
+.brand-meaning img {
+    width: 100%;
+    max-width: 700px;
+    height: auto;
+    margin-top: 20px;
+}
+
+.brand-meaning p {
+    text-align: justify;
+    margin: 20px auto;
+    max-width: 700px;
+}
+
+/* Phần Tầm nhìn, Sứ mệnh, Chính sách */
+.baby-bloom {
+    text-align: center;
+    margin: 50px 0;
+}
+
+.baby-bloom h2 {
+    font-weight: bold;
+    margin-bottom: 40px;
+}
+
+.vision-mission-quality {
+    display: flex;
+    justify-content: center;
+    margin: 50px 0;
+}
+
+.vision-mission-quality .card {
+    border: none;
+    margin: 0 15px;
+}
+
+.vision-mission-quality .card img {
+    width: 50px;
+    height: 50px;
+    margin-bottom: 20px;
+}
+
+.vision-mission-quality .card-body {
+    text-align: center;
+}
+
+.vision-mission-quality .card-body h5 {
+    font-weight: bold;
+}
+
+.vision-mission-quality .card-body p {
+    font-style: italic;
+    font-size: 14px;
+}
+
+
+/* phan doi ngu */
+
+.team-section {
+    text-align: center;
+    margin: 50px 0;
+}
+
+.team-section h2 {
+    font-weight: bold;
+    margin-bottom: 20px;
+}
+
+.team-section p {
+    color: #6c757d;
+    margin-bottom: 50px;
+}
+
+.team-card {
+    background-color: #f8f9fa;
+    border: none;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+    margin-bottom: 30px;
+}
+
+.team-card img {
+    width: 100%;
+    height: 250px;
+    background-color: #6c757d;
+}
+
+.team-card .card-body {
+    text-align: center;
+}
+
+.team-card h5 {
+    font-weight: bold;
+}
+
+.team-card p {
+    margin: 0;
+}
+
+
+/* phan tai sao chon */
+.why-choose {
+    text-align: center;
+    margin: 50px 0;
+}
+
+.why-choose h2 {
+    font-weight: bold;
+    margin-bottom: 20px;
+}
+
+.why-choose .description {
+    color: #6c757d;
+    margin-bottom: 50px;
+}
+
+.why-choose .content-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: start;
+    flex-wrap: wrap;
+    margin-bottom: 30px;
+}
+
+.why-choose .content-row img {
+    width: 100%;
+    height: auto;
+    background-color: #6c757d;
+    display: block;
+    margin-bottom: 15px;
+}
+
+.why-choose .content-row .text-content {
+    text-align: left;
+}
+
+.why-choose .text-content h5 {
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.why-choose .text-content p {
+    margin-bottom: 5px;
+}
+
+/* phan contact */
+.contact-form {
+    background-color: #6c757d;
+    padding: 30px;
+    border-radius: 10px;
+    color: #fff;
+    max-width: 600px;
+    margin: 50px auto;
+}
+
+.contact-form h4 {
+    font-weight: bold;
+}
+
+.contact-form p {
+    margin-bottom: 30px;
+}
+
+.form-control {
+    background-color: transparent;
+    border: 1px solid #fff;
+    color: #fff;
+}
+
+.form-control::placeholder {
+    color: #e9ecef;
+}
+
+.form-control:focus {
+    background-color: transparent;
+    border-color: #fff;
+    box-shadow: none;
+    color: #fff;
+}
+
+.btn-submit {
+    background-color: #fff;
+    color: #000;
+    font-weight: bold;
+    border-radius: 30px;
+    padding: 10px 30px;
+    margin-top: 20px;
+    border: none;
+}
+
+.btn-submit:hover {
+    background-color: #e9ecef;
+    color: #000;
+}
+

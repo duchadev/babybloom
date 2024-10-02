@@ -1,0 +1,70 @@
+.profile-button-upload {
+    text-align: center;
+    border: 1px dashed #ccc;
+    padding: 10px;
+    border-radius: 20px;
+    width: 150px;
+    margin: 0 auto;
+    height: 120px;
+
+}
+
+.card {
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.nav-tabs .nav-link {
+    border: none;
+    font-weight: bold;
+}
+
+.nav-tabs .nav-link.active {
+    background-color: transparent;
+    border-bottom: 2px solid black;
+}
+#upload-btn
+{
+    border: none;
+    height: 100px;
+    color: grey;
+}
+button#upload-btn {
+    padding-bottom: 70px;
+}
+.upload-image
+{
+    width: 60%;
+    height: 60px;
+}
+.container{
+    padding-bottom: 60px;
+}
+a{
+    color: black;
+}
+.logo {
+    width: 100%;
+}
+
+
+
+.dropdown-toggle::after {
+    margin-left: 8px;
+}
+
+.header-icons i {
+    font-size: 1.5rem;
+}
+
+.header-icons a {
+    color: #000;
+    text-decoration: none;
+}
+
+.header-icons a:hover {
+    color: #6a1b9a;
+}
+.vietnam-icon
+{
+    max-width: 30px;
+}

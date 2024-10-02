@@ -1,0 +1,15 @@
+p.card {
+  margin-top: 0px;
+}
+.button-add-to-cart
+{
+    display: flex;
+    justify-content: space-around;
+}
+button{
+    background-color: white;
+    width: 125px;
+    border: 1px solid black;
+    font-weight: bold;
+}
+

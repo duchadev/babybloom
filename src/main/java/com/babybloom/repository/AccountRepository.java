@@ -11,4 +11,5 @@ public interface AccountRepository extends JpaRepository<Customers, Integer> {
     
     Customers findAccountByEmail(String email);
     Customers findCustomersByPhoneNumber(String phoneNumberString);
+    Customers findCustomersByCustomerId(int id);
 }

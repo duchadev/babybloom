@@ -48,7 +48,7 @@ public class AuthController {
 	@PostMapping("/login")
 	public String login(@RequestParam(value = "email", defaultValue = "") String email,
 			@RequestParam(value = "phone", defaultValue = "") String phoneNumber,
-			@RequestParam("password") String password, Model model) {
+			@RequestParam("password") String password, Model model, HttpSession session) {
 		Base64.Encoder encoder = Base64.getEncoder();
 		String encodePass = encoder.encodeToString(password.getBytes());
 		if (!email.isBlank()) {
@@ -56,9 +56,12 @@ public class AuthController {
 			if (customers != null) {
 				if (customers.getPassword().trim().equalsIgnoreCase(encodePass.trim())) {
 					System.out.println("Login successfully: " + customers);
+					session.setAttribute("customerId", customers.getCustomerId());
 					return "jsp/index";
 				} else {
+					
 					System.out.println("Login failed: " + customers);
+					
 					return "jsp/login-page";
 				}
 			} else {
@@ -69,6 +72,7 @@ public class AuthController {
 			if (customers != null) {
 				if (customers.getPassword().trim().equalsIgnoreCase(encodePass.trim())) {
 					System.out.println("Login successfully: " + customers);
+					session.setAttribute("customerId", customers.getCustomerId());
 					return "jsp/index";
 				} else {
 					System.out.println("Login falied!: ");
@@ -320,12 +324,12 @@ public class AuthController {
 					String encodePass = encoder.encodeToString(password.getBytes());
 
 					String phoneNumber = phone;
-
-					String nameString = "";
+					Random rand = new Random();
+					value = rand.nextInt(1255650);
 					String address = "";
 					account.setPhoneNumber(phoneNumber);
-					account.setName(username);
-					account.setName(nameString);
+					account.setUsername(username);
+					account.setName("Customer"+value);
 					account.setAddress(address);
 					account.setEmail(email);
 					account.setPassword(encodePass);
@@ -443,7 +447,7 @@ public class AuthController {
 				Connection con = DriverManager.getConnection(
 						"jdbc:sqlserver://127.0.0.1:1433;DatabaseName=BabyBlom;encrypt=true;trustServerCertificate=true;",
 						"sa", "admin");
-				PreparedStatement pst = con.prepareStatement("update Customers set password = ? where  email   = ? ");
+				PreparedStatement pst = con.prepareStatement("updatWDPe Customers set password = ? where  email   = ? ");
 				pst.setString(1, encodePass);
 				pst.setString(2, (String) session.getAttribute("email"));
 

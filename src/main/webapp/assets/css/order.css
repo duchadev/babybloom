@@ -1,0 +1,40 @@
+.abc{
+    height: 70px;
+    border-bottom: 1px solid rgb(231, 226, 226);
+}
+button#add-btn
+{
+    border-radius: 5px;
+    background-color: black;
+    color: white;
+    border: none;
+    height: 30px;
+}
+.logo {
+    width: 100%;
+}
+
+a.page-link {
+    color: black;
+}
+
+.dropdown-toggle::after {
+    margin-left: 8px;
+}
+
+.header-icons i {
+    font-size: 1.5rem;
+}
+
+.header-icons a {
+    color: #000;
+    text-decoration: none;
+}
+
+.header-icons a:hover {
+    color: #6a1b9a;
+}
+.vietnam-icon
+{
+    max-width: 30px;
+}
